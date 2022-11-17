@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+
+struct nodo{
+	int nro;
+	char name[20];
+	char sur[20];
+	int age;
+	nodo *sig;
+};
+void push (nodo *&,nodo*&, nodo);
+void pop(nodo *);
+void search(nodo *);
+void del(nodo *&);
+
+int main(){
+	nodo *nodoI=NULL;
+	nodo *nodoF=NULL;
+	nodo datos;
+	char opc=' ';
+	while(opc!='5'){
+		printf("\n\tSeleccionar una opcion");
+		printf("\n 1- Insertar		2- Buscar apellido		3-Mostrar datos		4-Borrar primero		5- Cerrar.");
+		opc=getch();
+		switch(opc){
+			case '1':
+				system("cls");
+				printf("\n\t inserir el nombre: ");
+				scanf("%s", &datos.name);
+				system("cls");
+				printf("\n\t inserir el apellido: ");
+				scanf("%s", &datos.sur);
+				system("cls");
+				printf("\n\t inserir el numero: ");
+				scanf("%d", &datos.nro);
+				system("cls");
+				datos.age=10;
+				while(datos.age>90 || datos.age<15){
+				printf("\n\t inserir la edad entre 15 y 90: ");
+				scanf("%d", &datos.age);
+				system("cls");
+				}
+				push (*&nodoI, *&nodoF, datos);
+			break;
+			case'3':
+				system("cls");
+				pop(nodoI);
+			break;
+			case'2':
+				system("cls");
+				search(nodoI);
+			break;
+			case '4':
+				system("cls");
+				del(*&nodoI);	
+			break;	
+		}
+	}
+	system("cls");
+	printf("\n\t Gracias por utilizar el programa");
+}
+void push(nodo *&nodoI,nodo *&nodoF, nodo datos){
+	nodo *AUX=(nodo *)malloc(sizeof(struct nodo));
+	AUX->age=datos.age;
+	strcpy(AUX->name, datos.name);
+	strcpy(AUX->sur, datos.sur);
+	AUX->nro=datos.nro;
+	if ((*&nodoI)==NULL){
+		AUX->sig=NULL;
+		(*&nodoI)=AUX;
+		(*&nodoF)=AUX;
+	}else{
+		nodoF->sig=AUX;
+		(*&nodoF)=AUX;
+}
+printf("Persona agregada a la cola");
+}
+void pop(nodo *nodo1){
+	nodo *AUX=nodo1;
+	system("cls");
+	if (AUX==NULL){
+		printf("\n\t La cola esta vacia");
+	}else{
+	printf("\n\tLos datos en la cola son:");
+	while(AUX!=NULL){
+		printf("\n\t: %s %s \n edad: %d \n numero: %d", AUX->name, AUX->sur, AUX->age, AUX->nro);
+		AUX=AUX->sig;
+	}
+}
+}
+void search(nodo *nodo1){
+nodo *AUX=nodo1;
+	system("cls");
+	printf("\n\tInserir apellido a ser buscado:");
+	int sw;
+	char buscar[20];
+	scanf ("%s", &buscar);
+	while(AUX!=NULL){
+		if((strcmp(buscar, AUX->sur))==0){
+		printf("\n\t Dato encontrado");
+		sw=1;
+		printf("\n\t: %s %s \n Edad: %d \n Numero: %d", AUX->name, AUX->sur, AUX->age, AUX->nro);}
+		AUX=AUX->sig;}
+		if(sw!=1)
+		printf("\n\tDato no encontrado.");
+	}
+void del(nodo *&nodo1){
+	nodo *Aux1=(*&nodo1);
+	if (Aux1==NULL){
+		printf("\n\t La cola esta vacia");
+	}else{
+	printf("Eliminando %s", Aux1->name);
+	(*&nodo1)=Aux1->sig;
+	free(Aux1);
+}
+}
