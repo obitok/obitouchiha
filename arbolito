@@ -1,0 +1,183 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<iostream>
+
+struct Nodo{//creacion del nodo
+	int dato;
+	Nodo *der;
+	Nodo *izq;
+	Nodo *padre;
+	};
+	
+//prototipos 
+void menu();
+Nodo *crearnodo(int,Nodo *);
+void insertarNodo(Nodo *&,int,Nodo *);
+Nodo *arbol=NULL;
+void mostrarArbol(Nodo *,int);
+bool busqueda(Nodo *,int);
+void preOrden(Nodo *);
+void inOrden(Nodo *);
+void postOrden(Nodo *);
+void eliminar(Nodo *,int);
+//-------------------dentro del main			
+	int main(){
+		menu();
+		getch();
+		return 0;
+	}
+//--------------------------	
+	//MENU
+	void menu(){
+		int dato,opcion,contador=0;
+		do{
+			printf("\tMENU:");
+			printf("\n1. Insertar un nuevo nodo:");
+			printf("\n2. Mostrar el arbol completo:");
+			printf("\n3. Buscar un elemento en el arbol:");
+			printf("\n4. Recorrer el arbol en preOrden:");
+			printf("\n5. Recorrer el arbol en inOrden:");
+			printf("\n6. Recorrer el arbol en postOrden:");
+			printf("\n7. Salir:");
+			printf("\nOPCION:\n");
+			scanf("%d",&opcion);
+			switch(opcion){
+				case 1:printf("\nDigite un numero:");
+				scanf("%d",&dato);
+				insertarNodo(arbol,dato,NULL);//insertamos un nuevo nodo
+				printf("\n");
+				system("pause");
+				break;
+				case 2:printf("\nMostrando el arbol completo:\n\n");
+				mostrarArbol(arbol,contador);
+				printf("\n\n");
+				system("pause");
+				break;
+				case 3:printf("\nDigiete el elemento a buscar: ");
+				scanf("%d",&dato);
+				if(busqueda(arbol,dato)==true){
+					printf("\nElemento %d ha sido encontrado en el arbol\n",dato);
+				}
+				else{
+					printf("\nElemento no encontrado\n");
+				}
+				printf("\n");
+				system("pause");
+				break;
+				case 4:printf("\nRecorrido en preOrden: ");
+				preOrden(arbol);
+				printf("\n\n");
+				system("pause");
+				break;
+				case 5:printf("\nRecorrido en inOrden: ");
+				inOrden(arbol);
+				printf("\n\n");
+				system("pause");
+				break;
+				case 6:printf("\nRecorrido en postOrden: ");
+				postOrden(arbol);
+				printf("\n\n");
+				system("pause");
+				break;
+			}
+			system("cls");	
+		}while(opcion !=7);
+	}
+	//-----------------------------------------------------------funciones
+	//funcion para crear un nuevo nodo
+	Nodo *crearNodo(int n,Nodo *padre){
+		Nodo *nuevo_nodo=new Nodo();
+		nuevo_nodo->dato=n;
+		nuevo_nodo->der=NULL;
+		nuevo_nodo->izq=NULL;
+		nuevo_nodo->padre=padre;
+		return nuevo_nodo;
+	}
+	//funcion para insertar elementos en el arbol
+	
+	void insertarNodo(Nodo *&arbol,int n,Nodo *padre){
+		if(arbol==NULL){//si el arbol esta vacio
+			struct Nodo *nuevo_nodo=crearNodo(n,padre);
+			arbol=nuevo_nodo;
+			
+		}
+		else{//si el arbol tiene un nodo o mas de un nodo
+			int valorRaiz=arbol->dato;//obtenemos el valor de la raiz
+			if(n<valorRaiz){//si el elemento es menor a la raiz, insertamos en el lado izquierdo
+				insertarNodo(arbol->izq,n,arbol);
+			}
+			else{//si el elemento es mayor a la raiz, insertamos en el lado izquierdo
+				
+				insertarNodo(arbol->der,n,arbol);
+			}
+		}
+		
+		
+	}
+	//funcion para mostrar el arbol completo
+	void mostrarArbol(Nodo *arbol,int contador){
+		if(arbol==NULL){//siel arbol esta vacio
+			return;
+		}
+		else{
+			mostrarArbol(arbol->der,contador+1);
+			for(int i=0;i<contador;i++){
+				printf("   ");
+			}
+			printf("%d-----\n",arbol->dato);
+			mostrarArbol(arbol->izq,contador+1);
+		
+			
+		}
+	}
+	//funcion para buscar un elemento en el arbol
+	bool busqueda(Nodo *arbol,int n){
+		if(arbol==NULL){//si arbol esta vacio
+			return false;
+		}
+		else if(arbol->dato==n){//si el nodo es igual al elemento
+			return true;
+		}
+		else if(n<arbol->dato){
+			return busqueda(arbol->izq,n);
+		}
+		else{
+			return busqueda(arbol->der,n);
+		}
+	}
+	//funcion para recorrido en profundidad en preorden 
+	void preOrden(Nodo *arbol){
+		if(arbol==NULL){//si el arbol esta vacio
+			return;
+		}
+		else{
+			printf("%d - ",arbol->dato);
+			preOrden(arbol->izq);
+			preOrden(arbol->der);
+		}
+		
+	}
+	//funcion para recorrido en profundidad en inorden
+	void inOrden(Nodo *arbol){
+		if(arbol==NULL){//si el arbol esta vacio
+			return;
+		}
+		else{
+			inOrden(arbol->izq);
+			printf("%d - ",arbol->dato);
+			inOrden(arbol->der);
+		}
+	}
+	//funcion para recorrido en profundidad en postorden
+	void postOrden(Nodo *arbol){
+		if(arbol==NULL){//si arbol esta vacio
+			return;
+		}
+		else{
+			postOrden(arbol->izq);
+			postOrden(arbol->der);
+		    printf("%d - ",arbol->dato);
+		}
+	}
+	//-------------------------------------------------------------------
