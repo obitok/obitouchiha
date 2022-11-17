@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+
+struct nodo {
+	int doc;
+	char name[20];
+	char sur[20];
+	int nota;
+	char apodo[20];
+	nodo *sig;
+};
+void push (nodo *&, nodo);
+void pop(nodo *);
+void search(nodo *);
+void del(nodo *&);
+void registro(nodo *);
+int main(){
+	nodo *punt=NULL;
+	nodo datos;
+	char opc=' ';
+	while(opc!='6'){
+		printf("\n\tSeleccionar una opcion");
+		printf("\n1-Insertar		\n2-Buscar apellido		\n3-Mostrar datos		\n4-Borrar ultimo	\n5-Crear registro	\n6-Cerrar.");
+		opc=getch();
+		switch(opc){
+			case '1':
+				system("cls");
+				printf("\n\t inserir el nombre: ");
+				scanf("%s", &datos.name);
+				system("cls");
+				printf("\n\t inserir el apellido: ");
+				scanf("%s", &datos.sur);
+				system("cls");
+				printf("\n\t inserir el numero de documento: ");
+				scanf("%d", &datos.doc);
+				system("cls");
+				datos.nota=11;
+				while(datos.nota>10 || datos.nota<1){
+				printf("\n\t inserir la nota entre 1 y 10: ");
+				scanf("%d", &datos.nota);
+				system("cls");
+				}
+	             printf("\n\t inserir la apodo: ");
+				scanf("%s", &datos.apodo);
+				system("cls");
+				push (*&punt, datos);
+			break;
+			case'3':
+				system("cls");
+				pop(punt);
+			break;
+			case'2':
+				system("cls");
+				search(punt);
+			break;
+			case '4':
+				system("cls");
+				del(*&punt);	
+			break;	
+			case '5':
+				system("cls");
+					registro(punt);	
+			break;
+		}
+	}
+	system("cls");
+	printf("\n\t Gracias por utilizar el programa");
+}
+void push(nodo *&punt, nodo datos){
+	nodo *AUX=(nodo *)malloc(sizeof(struct nodo));
+	AUX->doc=datos.doc;
+	strcpy(AUX->name, datos.name);
+	strcpy(AUX->sur, datos.sur);
+	strcpy(AUX->apodo, datos.apodo);
+	AUX->nota=datos.nota;
+	if ((*&punt)==NULL){
+		(*&punt)=AUX;
+		AUX->sig=NULL;
+	}else{
+		AUX->sig=(*&punt);
+		(*&punt)=AUX;
+}
+printf("Persona agregada a la pila");
+}
+void pop(nodo *punt){
+	nodo *AUX=punt;
+	system("cls");
+	if (AUX==NULL){
+		printf("\n\t Pila vacia");
+	}else{
+	printf("\n\tLos datos en la pila son:");
+	while(AUX!=NULL){
+		printf("\n\t: %s %s \n documento: %d \n nota: %d \n apodo: %s", AUX->name, AUX->sur, AUX->doc, AUX->nota, AUX->apodo);
+		AUX=AUX->sig;
+		}
+	}
+}
+void search(nodo *punt){
+	nodo *AUX=punt;
+	system("cls");
+	printf("\n\tInserir apellido a ser buscado:");
+	int sw;
+	char buscar[20];
+	scanf ("%s", &buscar);
+	while(AUX!=NULL){
+		if((strcmp(buscar, AUX->sur))==0){
+		printf("\n\t Dato encontrado");
+		printf("\n\t: %s %s \n documento: %d \n nota: %d", AUX->name, AUX->sur, AUX->doc, AUX->nota);
+		sw=1;}
+		AUX=AUX->sig;}
+		if(sw!=1)
+		printf("\n\t Apellido no encontrado");
+	}
+void del(nodo *&punt){
+	nodo *Aux1=(*&punt);
+	if (Aux1==NULL){
+		printf("La pila esta vacia");
+	}else{
+	printf("Eliminando %s", Aux1->name);
+	(*&punt)=Aux1->sig;
+	free(Aux1);
+}
+}
+void registro(nodo *punt){
+	FILE *Ar;
+	if((Ar=fopen("archivolipazo.txt","w"))==NULL){
+		printf("\n\t\tERROR\n");
+	}
+	nodo *AUX=punt;
+	while(AUX!=NULL){
+		fprintf(Ar,"\n\t%d\t%s\t%s\t%d\t%s\n",AUX->doc,AUX->name,AUX->sur,AUX->nota,AUX->apodo);
+		AUX=AUX->sig;
+	}
+	fclose(Ar);
+}
